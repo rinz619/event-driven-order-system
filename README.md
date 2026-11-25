@@ -1,69 +1,124 @@
 # Event-Driven Order Processing System
 
-## Project Overview
+<p align="center">
+  <strong>A backend architecture case study demonstrating asynchronous processing, event-driven design, reliability patterns, and controlled order workflows.</strong>
+</p>
 
-A backend architecture case study exploring how event-driven processing can be used to handle order creation, validation, approval and asynchronous execution.
+---
 
-The system is designed around loosely coupled components to improve scalability, reliability and maintainability.
+## Overview
+
+This project presents a proposed backend architecture for processing orders asynchronously using Django REST Framework, Redis Streams, PostgreSQL, and Docker.
+
+The system is designed to separate API request handling from background processing while introducing controlled approval workflows, event-driven communication, and reliability considerations.
+
+> **Project Status:** Architecture & Documentation Case Study  
+> This repository contains architectural documentation and design decisions. It is not presented as a fully implemented or production-deployed application.
+
+---
+
+## Architecture
+
+```mermaid
+flowchart TD
+    A[Client] --> B[Django REST API]
+    B --> C[PostgreSQL]
+    B --> D[Redis Streams]
+    D --> E[Background Worker]
+    E --> F[Order Processing]
+    F --> G[Approval Workflow]
+    G --> H[Admin]
+```
+
+---
+
+## Core Workflow
+
+1. Client submits an order through the API.
+2. API validates the request.
+3. Order is persisted with an initial status.
+4. An event is published to Redis Streams.
+5. A background worker consumes and processes the event.
+6. The order transitions to an approval-pending state.
+7. An authorized administrator approves or rejects the order.
+8. The order reaches its final state.
+
+---
+
+## Engineering Focus
+
+- Event-driven architecture
+- Asynchronous background processing
+- Redis Streams and consumer groups
+- REST API design
+- Transactional data management
+- Idempotent event processing
+- Retry and failure recovery
+- Order lifecycle and state management
+- Role-based access control
+- Scalability and observability
+- Docker-based infrastructure
+
+---
 
 ## Technology Stack
 
-- **Programming Language:** Python
-- **Backend Framework:** Django / Django REST Framework
-- **Message Streaming:** Redis Streams
-- **Database:** PostgreSQL
-- **Background Processing:** Asynchronous Workers
-- **Containerization:** Docker
+| Technology | Purpose |
+|---|---|
+| Python | Backend programming language |
+| Django REST Framework | REST API and application layer |
+| PostgreSQL | Relational database |
+| Redis Streams | Event messaging |
+| Background Workers | Asynchronous processing |
+| Docker | Containerization |
 
-## System Architecture
+---
 
-The proposed architecture consists of:
+## Architecture Documentation
 
-1. REST API Layer
-2. Order Management Service
-3. Event Publishing Component
-4. Redis Stream
-5. Background Worker
-6. Approval Workflow
-7. PostgreSQL Database
+| Document | Description |
+|---|---|
+| [System Architecture](docs/architecture.md) | Components and architectural design |
+| [Architecture Diagram](docs/architecture-diagram.md) | Visual system architecture |
+| [Order Workflow](docs/order-workflow.md) | Order lifecycle and state transitions |
+| [Technical Decisions](docs/technical-decisions.md) | Technology choices and trade-offs |
+| [Production Considerations](docs/production-considerations.md) | Security, reliability, deployment, monitoring |
 
-## Key Engineering Concepts
+---
 
-- Event-driven architecture
-- Asynchronous processing
-- Service decoupling
-- Order lifecycle management
-- Retry and failure recovery
-- Idempotent event processing
-- Database transaction management
-- Scalable backend design
+## Reliability Considerations
 
-## Order Processing Workflow
+The proposed design explores:
 
-1. A client submits an order through the API.
-2. The API validates the incoming request.
-3. An order event is published to the message stream.
-4. A background worker consumes the event.
-5. The order enters a pending approval state.
-6. An authorized administrator reviews the order.
-7. Approved orders proceed to the next processing stage.
-8. Processing results and status changes are recorded.
+- Duplicate event handling
+- Idempotent processing
+- Retry strategies
+- Worker failure recovery
+- Pending message recovery
+- Database transaction integrity
+- Monitoring and alerting
+- Unauthorized state transition prevention
 
-## Reliability and Security Considerations
+---
 
-- Controlled event consumption
-- Duplicate event protection
-- Failure recovery strategies
-- Secure API authentication
-- Environment-based configuration
-- Separation of sensitive credentials
+## Future Improvements
 
-## Repository Scope
+- Implement API endpoints and serializers.
+- Add Redis Streams consumer groups.
+- Implement worker retry and recovery mechanisms.
+- Add automated tests.
+- Add authentication and role-based authorization.
+- Introduce monitoring and structured logging.
+- Docker Compose development environment.
+- CI/CD pipeline.
+- Load testing and performance analysis.
 
-This repository contains architecture documentation and technical design explanations only.
+---
 
-Private implementation code, credentials, production configurations and proprietary business logic are intentionally excluded.
+## What This Project Demonstrates
 
-## Project Status
+This case study focuses on backend engineering decisions beyond basic CRUD development, including component separation, asynchronous processing, failure handling, system scalability, and workflow design.
 
-Architecture documentation and system design case study.
+---
+
+**Author:** [Rinshad](https://github.com/rinz619)
